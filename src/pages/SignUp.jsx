@@ -1,7 +1,10 @@
-import { auth } from "../firebase/firebase.config";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthProvider";
 
 const SignUp = () => {
-  const handleSignUp = (e) => {
+  const { createUser } = useContext(AuthContext);
+
+  const handleSignUp = async (e) => {
     e.preventDefault();
 
     const name = e.target.name.value;
@@ -9,6 +12,13 @@ const SignUp = () => {
     const password = e.target.password.value;
 
     console.log(name, email, password);
+
+    try {
+      const res = await createUser(email, password);
+      console.log(res);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
