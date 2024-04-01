@@ -1,15 +1,9 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase/firebase.config";
 
 const Navbar = () => {
-  const { user } = useContext(AuthContext);
-
-  const handleSignOut = () => {
-    signOut(auth);
-  };
+  const { user, logOut } = useContext(AuthContext);
 
   return (
     <div className="container mx-auto">
@@ -22,17 +16,29 @@ const Navbar = () => {
             <li>
               <NavLink to="/">Home</NavLink>
             </li>
-            <li>
-              <NavLink to="/login">Login</NavLink>
-            </li>
-            <li>
-              <NavLink to="/sign-up">Sign Up</NavLink>
-            </li>
+
+            {user ? (
+              <>
+                <li className="px-4 my-2">{user.email}</li>
+
+                <li>
+                  <NavLink to="/dashboard">Dashboard</NavLink>
+                </li>
+                <button onClick={logOut} className="btn btn-sm">
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <li>
+                  <NavLink to="/login">Login</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/sign-up">Sign Up</NavLink>
+                </li>
+              </>
+            )}
           </ul>
-          {user && <span className="px-4">{user.email}</span>}
-          <button onClick={handleSignOut} className="btn">
-            Sign Out
-          </button>
         </div>
       </div>
     </div>
